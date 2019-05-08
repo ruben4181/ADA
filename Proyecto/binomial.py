@@ -3,52 +3,131 @@ from sys import stdin
 import operator as op
 from functools import reduce
 
+top16=[0, 0, 44721361, 181714, 12449, 2608, 950, 473, 286, 197, 148, 119, 100, 87, 78, 72, 67, 63, 61, 59, 57, 56, 55, 54, 54, 54, 54, 54, 54, 54]
+top2=[0, 0, 46, 20, 14, 13, 13, 13, 13, 14, 14, 15, 16, 17, 18, 19, 20, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]
+top3=[0, 0, 142, 41, 24, 19, 17, 16, 16, 16, 17, 17, 18, 19, 19, 20, 21, 22, 23, 24, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
+top4=[0, 0, 448, 86, 41, 29, 23, 21, 20, 20, 20, 20, 20, 21, 21, 22, 23, 23, 24, 25, 26, 27, 28, 29, 29, 30, 31, 32, 33, 34]
+top5=[0, 0, 1415, 183, 72, 44, 33, 28, 25, 24, 23, 23, 23, 23, 24, 24, 25, 25, 26, 27, 28, 28, 29, 30, 31, 32, 33, 33, 34, 35]
+top6=[0, 0, 4473, 393, 126, 68, 47, 37, 32, 29, 28, 27, 27, 26, 27, 27, 27, 28, 28, 29, 29, 30, 31, 32, 32, 33, 34, 35, 36, 37]
+top7=[0, 0, 14143, 845, 223, 106, 68, 51, 42, 37, 34, 32, 31, 30, 30, 30, 30, 30, 31, 31, 32, 32, 33, 34, 34, 35, 36, 37, 37, 38]
+top8=[0, 0, 44722, 1819, 396, 167, 98, 69, 54, 46, 41, 38, 36, 35, 34, 33, 33, 33, 33, 34, 34, 35, 35, 36, 36, 37, 38, 38, 39, 40]
+top9=[0, 0, 141422, 3916, 702, 263, 142, 94, 71, 58, 50, 45, 42, 40, 39, 38, 37, 37, 37, 37, 37, 37, 38, 38, 39, 39, 40, 40, 41, 42]
+top10=[0, 0, 447215, 8436, 1247, 415, 207, 130, 93, 74, 62, 55, 50, 46, 44, 43, 41, 41, 40, 40, 40, 40, 40, 41, 41, 41, 42, 43, 43, 44]
+top11=[0, 0, 1414215, 18173, 2215, 657, 302, 179, 123, 94, 77, 66, 59, 54, 51, 48, 47, 45, 44, 44, 44, 43, 43, 44, 44, 44, 44, 45, 45, 46]
+top12=[0, 0, 4472137, 39150, 3938, 1040, 442, 247, 163, 120, 95, 80, 70, 63, 58, 55, 52, 51, 49, 48, 48, 47, 47, 47, 47, 47, 47, 48, 48, 48]
+top13=[0, 0, 14142137, 84345, 7001, 1646, 648, 342, 216, 154, 119, 98, 84, 74, 68, 63, 59, 57, 55, 53, 52, 51, 51, 50, 50, 50, 50, 50, 51, 51]
+top14=[0, 0, 44721361, 181714, 12449, 2608, 950, 473, 286, 197, 148, 119, 100, 87, 78, 72, 67, 63, 61, 59, 57, 56, 55, 54, 54, 54, 54, 54, 54, 54]
+top15=[0, 0, 141421357, 391488, 22136, 4131, 1393, 656, 380, 253, 185, 145, 120, 103, 91, 83, 76, 71, 68, 65, 63, 61, 60, 59, 58, 58, 57, 57, 57, 57]
+
+
+def getTop(n, i):
+	top=44721361
+	if n<=1000:
+		return top2[i]
+	if n>1000:
+		return top3[i]
+	if n>10000:
+		return top4[i]
+	if n>100000:
+		return top5[i]
+	if n>1000000:
+		return top6[i]
+	if n>10000000:
+		return top7[i]
+	if n>100000000:
+		return top8[i]
+	if n>1000000000:
+		return top9[i]
+	if n>10000000000:
+		return top10[i]
+	if n>100000000000:
+		return top11[i]
+	if n>1000000000000:
+		return top12[i]
+	if n>10000000000000:
+		return top13[i]
+	if n>100000000000000:
+		return top14[i]
+	if n>1000000000000000:
+		return top15[i]
+	if n>10000000000000000:
+		return top16[i]
+	return top
+
 def ncr(n, r):
     r = min(r, n-r)
     numer = reduce(op.mul, range(n, n-r, -1), 1)
     denom = reduce(op.mul, range(1, r+1), 1)
-    return numer / denom
+    return numer // denom
+
+def klimit(n):
+	l=2
+	h=120
+	mid=(l+h)//2
+	midt=mid//2
+	ans=-1
+	oldAns=0
+	while l<h:
+		test=ncr(mid, midt)
+		if test>n:
+			h=mid
+		else:
+			l=mid
+		mid=(l+h)//2
+		midt=mid//2
+		ans=midt
+		if ans==oldAns:
+			break
+		else:
+			oldAns=ans
+	return ans
+
+def findInColumn(n, r):
+    l=2
+    h=getTop(n, r)
+    mid=(l+h)//2
+    ans=-1
+    oldtest=0
+    while l+1<h and ans==-1:
+    	test=ncr(mid,r)
+    	if test<=n:
+    		if test==n:
+    			ans=mid
+    		else:
+    			l=mid
+    	else:
+    		h=mid
+    	mid=(l+h)//2
+    return ans
 
 def solve(n):
-    m=4
-    cm=[1,3]
-    ops=0
-    flag=False
-    if n<=3:
-        return 1
-    while(not flag):
-        tmp=[]
-        tmp.append(1)
-        cmSize=len(cm)
-        for i in range(cmSize-1):
-            buff=cm[i]+cm[i+1]
-            if buff<=n:
-                if buff==n:
-                    return (i+1, ops)
-                else:
-                    tmp.append(buff)
+    if n==2:
+        return [(2,1)]
+    ans=[]
+    k=klimit(n)
+    for i in range(2,k+1):
+        tmp=findInColumn(n, i)
+        if tmp!=-1 and (tmp, i) not in ans:
+            if tmp%2==0:
+                ans.append((tmp, i))
+                if i!=tmp/2:
+                    ans.append((tmp, tmp-i))
             else:
-                return (i+1, ops)
-            ops+=1
-        if m%2==0 and len(tmp)==m/2:
-            buff=cm[-1]*2
-            if buff<=n:
-                if buff==n:
-                    return (i+2, ops)
-                else:
-                    tmp.append(buff)
-            else:
-                return (i+1, ops)
-        #print(cm)
-        cm=tmp
-        m+=1
-    return n
-
+                ans.append((tmp, i))
+                ans.append((tmp, tmp-i))
+    ans.append((n, 1))
+    ans.append((n, n-1))
+    ans.sort()
+    return ans
 def main():
     N=int(stdin.readline().strip('\n'))
     for i in range(N):
         n=int(stdin.readline().strip())
         ans=solve(n)
-        print(ans)
+        result=""
+        for bc in ans:
+            result+="("+str(bc[0])+","+str(bc[1])+") "
+        print(len(ans))
+        print(result[:-1])
     return
 main()
