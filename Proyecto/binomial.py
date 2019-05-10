@@ -22,35 +22,35 @@ top16=[0, 0, 447213596, 843434, 39362, 6546, 2043, 910, 506, 326, 232, 178, 144,
 def getTop(n, i):
 	top=44721361
 	if n<=1000:
-		return top2[i]
+		return [2,top2[i]]
 	if n>1000 and n<10000:
-		return top3[i]
+		return [top2[i], top3[i]]
 	if n>10000 and n<100000:
-		return top4[i]
+		return [top3[i], top4[i]]
 	if n>100000 and n<1000000:
-		return top5[i]
+		return [top4[i], top5[i]]
 	if n>1000000 and n<10000000:
-		return top6[i]
+		return [top5[i], top6[i]]
 	if n>10000000 and n<100000000:
-		return top7[i]
+		return [top6[i], top7[i]]
 	if n>100000000 and n<1000000000:
-		return top8[i]
+		return [top7[i], top8[i]]
 	if n>1000000000 and n<10000000000:
-		return top9[i]
+		return [top8[i],top9[i]]
 	if n>10000000000 and n<100000000000:
-		return top10[i]
+		return [top9[i], top10[i]]
 	if n>100000000000 and n<1000000000000:
-		return top11[i]
+		return [top10[i], top11[i]]
 	if n>1000000000000 and n<10000000000000:
-		return top12[i]
+		return [top11[i], top12[i]]
 	if n>10000000000000 and n<100000000000000:
-		return top13[i]
+		return [top12[i], top13[i]]
 	if n>100000000000000 and n<1000000000000000:
-		return top14[i]
+		return [top13[i], top14[i]]
 	if n>1000000000000000 and n<10000000000000000:
-		return top15[i]
+		return [top14[i], top15[i]]
 	if n>10000000000000000:
-		return top16[i]
+		return [top15[i], top16[i]]
 	return top
 
 def ncr(n, r):
@@ -82,8 +82,8 @@ def klimit(n):
 	return ans
 
 def findInColumn(n, r):
-    l=2
-    h=getTop(n, r)
+    l,h=getTop(n, r)
+    l=l-1
     mid=(l+h)//2
     ans=-1
     oldtest=0
@@ -101,7 +101,7 @@ def findInColumn(n, r):
 
 def precalc():
 	A={}
-	for k in range(5, 29):
+	for k in range(4, 29):
 		for n in range(2, top16[k]+1):
 			test=ncr(n,k)
 			if test in A.keys():
@@ -114,7 +114,7 @@ def solve(n, A):
 	if n==2:
 		return [(2,1)]
 	ans=[]
-	for i in range(2,6):
+	for i in range(2,5):
 		tmp=findInColumn(n, i)
 		if tmp!=-1 and (tmp, i) not in ans:
 			ans.append((tmp, i))
