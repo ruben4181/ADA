@@ -99,30 +99,51 @@ def findInColumn(n, r):
     	mid=(l+h)//2
     return ans
 
-def solve(n):
-    if n==2:
-        return [(2,1)]
-    ans=[]
-    k=klimit(n)
-    for i in range(2,k+1):
-        tmp=findInColumn(n, i)
-        if tmp!=-1 and (tmp, i) not in ans:
-            if tmp%2==0:
-                ans.append((tmp, i))
-                if i!=tmp/2:
-                    ans.append((tmp, tmp-i))
-            else:
-                ans.append((tmp, i))
-                ans.append((tmp, tmp-i))
-    ans.append((n, 1))
-    ans.append((n, n-1))
-    ans.sort()
-    return ans
+def precalc():
+	A={}
+	for k in range(5, 29):
+		for n in range(2, top16[k]+1):
+			test=ncr(n,k)
+			if test in A.keys():
+				A[test].append((n,k))
+			else:
+				A[test]=[(n,k)]
+	return A
+
+def solve(n, A):
+	if n==2:
+		return [(2,1)]
+	ans=[]
+	for i in range(2,6):
+		tmp=findInColumn(n, i)
+		if tmp!=-1 and (tmp, i) not in ans:
+			ans.append((tmp, i))
+			if tmp%2==0:
+				if i!=tmp/2:
+					ans.append((tmp, tmp-i))
+			else:
+				ans.append((tmp, tmp-i))
+	if (n, 1) not in ans:
+		ans.append((n, 1))
+	if (n, n-1) not in ans:
+		ans.append((n, n-1))
+	if n in A.keys():
+		for nk in A[n]:
+			if nk not in ans:
+				ans.append(nk)
+				if nk[0]%2==0:
+					if nk[1]!=nk[0]/2:
+						ans.append((nk[0], nk[0]-nk[1]))
+				else:
+					ans.append((nk[0], nk[0]-nk[1]))
+	ans.sort()
+	return ans
 def main():
     N=int(stdin.readline().strip('\n'))
+    A=precalc()
     for i in range(N):
         n=int(stdin.readline().strip())
-        ans=solve(n)
+        ans=solve(n, A)
         result=""
         for bc in ans:
             result+="("+str(bc[0])+","+str(bc[1])+") "
