@@ -81,9 +81,8 @@ def klimit(n):
 			oldAns=ans
 	return ans
 
-def findInColumn(n, r):
-    l,h=getTop(n, r)
-    l=top16[4]-1
+def findInColumn(n, r, l):
+    _,h=getTop(n, r)
     mid=(l+h)>>1
     ans=-1
     while l+1<h and ans==-1:
@@ -129,6 +128,7 @@ def solve(n, A):
 						ans.append((nk[0], nk[0]-nk[1]))
 				else:
 					ans.append((nk[0], nk[0]-nk[1]))
+	
 	findIn2=True
 	findIn3=True
 	for (a,b) in ans:
@@ -136,15 +136,21 @@ def solve(n, A):
 			findIn2=False
 		if b==3:
 			findIn3=False
+	
 	toFind=[0, 0]
+	
 	if findIn2 and findIn3:
-		toFind=[2, 4]
+		toFind=[3, 1]
 	if findIn2 and not findIn3:
-		toFind=[2, 3]
+		toFind=[2, 1]
 	if not findIn2 and findIn3:
-		toFind=[3, 4]
-	for i in range(toFind[0],toFind[1]):
-		tmp=findInColumn(n, i)
+		toFind=[3, 2]
+	l=2
+	foundIn3=False
+	for i in range(toFind[0],toFind[1], -1):
+		if i==2 and not foundIn3:
+			break
+		tmp=findInColumn(n, i, max(top16[4], l))
 		if tmp!=-1 and (tmp, i) not in ans:
 			ans.append((tmp, i))
 			if tmp%2==0:
@@ -152,6 +158,8 @@ def solve(n, A):
 					ans.append((tmp, tmp-i))
 			else:
 				ans.append((tmp, tmp-i))
+			l=tmp
+			foundIn3=True
 	if (n, 1) not in ans:
 		ans.append((n, 1))
 	if (n, n-1) not in ans:
