@@ -59,6 +59,11 @@ def ncr(n, r):
     denom = reduce(op.mul, range(1, r+1), 1)
     return numer // denom
 
+def nc2(n):
+        return (n-1)+n//2
+def nc3(n):
+        return (n-2)*(n-1)*n//6
+
 def klimit(n):
 	l=2
 	h=120
@@ -82,24 +87,27 @@ def klimit(n):
 	return ans
 
 def findInColumn(n, r, l):
-    _,h=getTop(n, r)
-    mid=(l+h)>>1
-    ans=-1
-    while l+1<h and ans==-1:
-    	test=ncr(mid,r)
-    	if test<=n:
-    		if test==n:
-    			ans=mid
-    		else:
-    			l=mid
-    	else:
-    		h=mid
-    	mid=(l+h)>>1
-    return ans
+        _,h=getTop(n, r)
+        mid=(l+h)>>1
+        ans=-1
+        while l+1<h and ans==-1:
+                if r==2:
+                        test=nc2(mid)
+                else:
+                        test=nc3(mid)
+                if test<=n:
+                        if test==n:
+                                ans=mid
+                        else:
+                                l=mid
+                else:
+                        h=mid
+                mid=(l+h)>>1
+        return ans
 
 def precalc():
 	A={}
-	for k in range(4, 28):
+	for k in range(4, 29):
 		for n in range(2, top16[k]+1):
 			test=ncr(n,k)
 			if test in A.keys():
@@ -128,29 +136,8 @@ def solve(n, A):
 						ans.append((nk[0], nk[0]-nk[1]))
 				else:
 					ans.append((nk[0], nk[0]-nk[1]))
-	
-	findIn2=True
-	findIn3=True
-	for (a,b) in ans:
-		if b==2:
-			findIn2=False
-		if b==3:
-			findIn3=False
-	
-	toFind=[0, 0]
-	
-	if findIn2 and findIn3:
-		toFind=[3, 1]
-	if findIn2 and not findIn3:
-		toFind=[2, 1]
-	if not findIn2 and findIn3:
-		toFind=[3, 2]
-	l=2
-	foundIn3=False
-	for i in range(toFind[0],toFind[1], -1):
-		if i==2 and not foundIn3:
-			break
-		tmp=findInColumn(n, i, max(top16[4], l))
+	for i in range(2, 4):
+		tmp=findInColumn(n, i, top16[4])
 		if tmp!=-1 and (tmp, i) not in ans:
 			ans.append((tmp, i))
 			if tmp%2==0:
@@ -158,8 +145,6 @@ def solve(n, A):
 					ans.append((tmp, tmp-i))
 			else:
 				ans.append((tmp, tmp-i))
-			l=tmp
-			foundIn3=True
 	if (n, 1) not in ans:
 		ans.append((n, 1))
 	if (n, n-1) not in ans:
